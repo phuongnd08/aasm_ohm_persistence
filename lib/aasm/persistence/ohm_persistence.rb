@@ -46,7 +46,6 @@ module AASM
 
       module InstanceMethods
         def before_create
-          byebug
           aasm_ensure_initial_state
         end
 
