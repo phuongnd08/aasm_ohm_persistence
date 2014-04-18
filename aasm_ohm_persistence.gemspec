@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["phuongnd08@gmail.com"]
   spec.description   = %q{Persistence adapter for Ohm to use with AASM}
   spec.summary       = %q{Persistence adapter for Ohm to use with AASM}
-  spec.homepage      = ""
+  spec.homepage      = "http://github.com/phuongnd08/aasm_ohm_persistence"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
