@@ -1,4 +1,6 @@
 require "aasm/persistence/base"
+require "ohm/callbacks"
+
 module AASM
   module Persistence
     module OhmPersistence
