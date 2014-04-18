@@ -33,11 +33,6 @@ module AASM
       end
 
       module ClassMethods
-
-        def before_create
-          aasm_ensure_initial_state
-        end
-
         def find_in_state(id, state, *args)
           find(aasm_column.to_sym => state)[id]
         end
@@ -48,6 +43,10 @@ module AASM
       end
 
       module InstanceMethods
+        def before_create
+          byebug
+          aasm_ensure_initial_state
+        end
 
         # Writes <tt>state</tt> to the state column and persists it to the database
         #
