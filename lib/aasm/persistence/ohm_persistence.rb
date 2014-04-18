@@ -1,3 +1,4 @@
+require "aasm/persistence/base"
 module AASM
   module Persistence
     module OhmPersistence
