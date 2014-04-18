@@ -28,8 +28,8 @@ module AASM
       def self.included(base)
         base.send(:include, AASM::Persistence::Base)
         base.extend AASM::Persistence::OhmPersistence::ClassMethods
-        base.send(:include, AASM::Persistence::OhmPersistence::InstanceMethods)
         base.send(:include, Ohm::Callbacks)
+        base.send(:include, AASM::Persistence::OhmPersistence::InstanceMethods)
       end
 
       module ClassMethods
