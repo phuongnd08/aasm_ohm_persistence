@@ -84,7 +84,7 @@ module AASM
         #
         # NOTE: intended to be called from an event
         def aasm_write_state_without_persistence(state)
-          self[sefl.class.aasm_column] = state.to_s
+          self[self.class.aasm_column] = state.to_s
         end
 
       private
