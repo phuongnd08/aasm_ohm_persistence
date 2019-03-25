@@ -60,14 +60,14 @@ module AASM
         #
         # NOTE: intended to be called from an event
 
-        def aasm_write_state(state)
-          old_value = self.send(self.class.aasm_column.to_sym)
-          aasm_write_state_without_persistence(state)
+        def aasm_write_state(state, name = :default)
+          old_value = self.send(self.class.aasm(name).attribute_name)
+          aasm_write_state_without_persistence(state, name)
 
           success = self.save
 
           unless success
-            aasm_write_state_without_persistence(old_value)
+            aasm_write_state_without_persistence(old_value, name)
             return false
           end
 
@@ -86,8 +86,8 @@ module AASM
         #   Foo.find(1).aasm.current_state # => :closed
         #
         # NOTE: intended to be called from an event
-        def aasm_write_state_without_persistence(state)
-          self.send(:"#{self.class.aasm_column}=", state.to_s)
+        def aasm_write_state_without_persistence(state, name = :default)
+          self.send(:"#{self.class.aasm(name).attribute_name}=", state.to_s)
         end
 
       private
