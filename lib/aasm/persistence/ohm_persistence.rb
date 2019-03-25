@@ -34,16 +34,6 @@ module AASM
         base.send(:include, AASM::Persistence::OhmPersistence::InstanceMethods)
       end
 
-      module ClassMethods
-        def find_in_state(id, state, *args)
-          find(aasm_column.to_sym => state)[id]
-        end
-
-        def count_in_state(state, *args)
-          find(aasm_column.to_sym => state).count
-        end
-      end
-
       module InstanceMethods
         def before_create
           super
