@@ -29,19 +29,8 @@ module AASM
       #
       def self.included(base)
         base.send(:include, AASM::Persistence::Base)
-        base.extend AASM::Persistence::OhmPersistence::ClassMethods
         base.send(:include, Ohm::Callbacks)
         base.send(:include, AASM::Persistence::OhmPersistence::InstanceMethods)
-      end
-
-      module ClassMethods
-        def find_in_state(id, state, *args)
-          find(aasm_column.to_sym => state)[id]
-        end
-
-        def count_in_state(state, *args)
-          find(aasm_column.to_sym => state).count
-        end
       end
 
       module InstanceMethods
@@ -60,14 +49,14 @@ module AASM
         #
         # NOTE: intended to be called from an event
 
-        def aasm_write_state(state)
-          old_value = self.send(self.class.aasm_column.to_sym)
-          aasm_write_state_without_persistence(state)
+        def aasm_write_state(state, name = :default)
+          old_value = self.send(self.class.aasm(name).attribute_name)
+          aasm_write_state_without_persistence(state, name)
 
           success = self.save
 
           unless success
-            aasm_write_state_without_persistence(old_value)
+            aasm_write_state_without_persistence(old_value, name)
             return false
           end
 
@@ -86,8 +75,8 @@ module AASM
         #   Foo.find(1).aasm.current_state # => :closed
         #
         # NOTE: intended to be called from an event
-        def aasm_write_state_without_persistence(state)
-          self.send(:"#{self.class.aasm_column}=", state.to_s)
+        def aasm_write_state_without_persistence(state, name = :default)
+          self.send(:"#{self.class.aasm(name).attribute_name}=", state.to_s)
         end
 
       private
@@ -108,10 +97,13 @@ module AASM
         #   foo.aasm_state # => nil
         #
         def aasm_ensure_initial_state
-          aasm.enter_initial_state if send(self.class.aasm_column).blank?
+          AASM::StateMachine[self.class].keys.each do |state_machine_name|
+            next if send(self.class.aasm(state_machine_name).attribute_name).present?
+            send("#{self.class.aasm(state_machine_name).attribute_name}=",
+                 aasm(state_machine_name).enter_initial_state.to_s)
+          end
         end
       end # InstanceMethods
     end
   end
 end
-

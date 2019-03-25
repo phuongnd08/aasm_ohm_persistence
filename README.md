@@ -44,6 +44,11 @@ to write it like that:
       super
       # your own code
     end
+    
+## Compatibility
+
+Version 0.2.0 of this gem is compatible with aasm gem versions 4.3.0 - 4.9.0, except using inherited Ohm::Model 
+classes with state_machine defined on superclass.
 
 ## Contributing
 
